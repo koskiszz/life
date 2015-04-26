@@ -18,6 +18,7 @@ public slots:
 
 private slots:
     void paintGrid(QPainter &painter);
+    void paintCells(QPainter &painter);
 
 private:
     QColor color;
@@ -27,6 +28,7 @@ private:
     int fieldSize;
 
     void paintEvent(QPaintEvent *);
+
 };
 
 #endif // FIELDWIDGET_H
