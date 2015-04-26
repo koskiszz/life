@@ -1,4 +1,5 @@
 #include "fieldwidget.h"
+#include <qmath.h>
 
 
 FieldWidget::FieldWidget(QWidget *parent) :
@@ -12,7 +13,21 @@ FieldWidget::FieldWidget(QWidget *parent) :
     timer->setInterval(80);
     // заполняем массив фолсами
     memset(&cells, false, sizeof(cells));
-    cells[5][3] = true;
+}
+
+// срабатывает при клике по ячейке
+void FieldWidget::mousePressEvent(QMouseEvent *event)
+{
+    double cellWidth = (double) width() / fieldSize;
+    double cellHeight = (double) height() / fieldSize;
+
+    // подсчитываем в какую ячейку кликнули
+    int i = floor(event->y() / cellHeight) + 1;
+    int j = floor(event->x() / cellWidth) + 1;
+
+    // изменяем значение и перерисовываем
+    cells[i][j] = ! cells[i][j];
+    update();
 }
 
 // отвечает за отрисовку

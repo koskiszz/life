@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QTimer>
 #include <QPainter>
+#include <QMouseEvent>
 
 class FieldWidget : public QWidget
 {
@@ -28,6 +29,7 @@ private:
     int fieldSize;
 
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *event);
 
 };
 
