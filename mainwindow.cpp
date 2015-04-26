@@ -3,9 +3,11 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    field(new FieldWidget(this))
 {
     ui->setupUi(this);
+    ui->fieldLayout->addWidget(field);
 }
 
 MainWindow::~MainWindow()
