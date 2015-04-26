@@ -12,6 +12,7 @@ class FieldWidget : public QWidget
     Q_OBJECT
 public:
     explicit FieldWidget(QWidget *parent = 0);
+    ~FieldWidget();
 
 signals:
 
@@ -23,14 +24,16 @@ public slots:
 private slots:
     void paintGrid(QPainter &painter);
     void paintCells(QPainter &painter);
+    void newGeneration();
 
 private:
     QColor color;
     QTimer* timer;
-    int generation;
-    bool cells[102][102];
+    bool** cells;
+    bool** next;
     int fieldSize;
 
+    bool isAlive(int i, int j);
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *event);
 

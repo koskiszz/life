@@ -7,14 +7,37 @@ FieldWidget::FieldWidget(QWidget *parent) :
     QWidget(parent),
     color("#000"),
     timer(new QTimer(this)),
-    generation(0),
-    fieldSize(10)
+    fieldSize(20)
 
 {
-    timer->setInterval(80);
-    // заполняем массив фолсами
-    memset(&cells, false, sizeof(cells));
+    timer->setInterval(100);
+
+    // создадим два динамических массива нужного размера
+    cells = new bool* [fieldSize + 2];
+    next  = new bool* [fieldSize + 2];
+    for (int i = 0; i < fieldSize + 2; ++i) {
+        cells[i] = new bool [fieldSize + 2];
+        next[i]  = new bool [fieldSize + 2];
+        // заполним исходный массив нулями
+        for (int j = 0; j < fieldSize + 2; ++j) {
+            cells[i][j] = false;
+            next[i][j] = false;
+        }
+    }
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
 }
+
+FieldWidget::~FieldWidget()
+{
+    for (int i = 0; i < fieldSize + 2; ++i) {
+        delete [] cells[i];
+        delete [] next[i];
+    }
+    delete [] cells;
+    delete [] next;
+}
+
 
 // срабатывает при клике по ячейке
 void FieldWidget::mousePressEvent(QMouseEvent *event)
@@ -89,17 +112,73 @@ void FieldWidget::paintCells(QPainter &painter)
 
 void FieldWidget::start()
 {
-    QMessageBox::information(this, "Start", "start", QMessageBox::Ok);
+    timer->start();
 }
 
 void FieldWidget::stop()
 {
-    QMessageBox::information(this, "Stop", "stop", QMessageBox::Ok);
+    timer->stop();
 }
 
 void FieldWidget::clear()
 {
-    memset(&cells, false, sizeof(cells));
+    for (int i = 0; i < fieldSize + 2; ++i) {
+        for (int j = 0; j < fieldSize + 2; ++j) {
+            cells[i][j] = false;
+            next[i][j] = false;
+        }
+    }
     update();
+}
+
+void FieldWidget::newGeneration()
+{
+    bool isChanged = false;
+
+    for (int i = 1; i <= fieldSize; ++i) {
+        for(int j = 1; j <= fieldSize; ++j) {
+            // для каждой клетки смотрим жива ли она
+            next[i][j] = isAlive(i, j);
+            // если где-то что-то поменялось, то зафиксируем это
+            if (next[i][j] != cells[i][j])
+                isChanged = true;
+        }
+    }
+
+    // если у нас есть изменения
+    if (isChanged) {
+        // меняем местами массивы и перерисовываем
+        bool** tmp = cells;
+        cells = next;
+        next = tmp;
+        update();
+    }
+    else {
+        QMessageBox::information(this, "Finish", "Finish", QMessageBox::Ok);
+        stop();
+    }
+}
+
+bool FieldWidget::isAlive(int i, int j)
+{
+    int count = 0;
+    count += cells[i + 1][j];
+    count += cells[i - 1][j];
+    count += cells[i][j + 1];
+    count += cells[i][j - 1];
+    count += cells[i + 1][j + 1];
+    count += cells[i - 1][j - 1];
+    count += cells[i - 1][j + 1];
+    count += cells[i + 1][j - 1];
+
+    if (cells[i][j] == false && count == 3) {
+        return true;
+    }
+
+    if ((cells[i][j] == true) && ((count == 2) || (count == 3))) {
+        return true;
+    }
+
+    return false;
 }
 
