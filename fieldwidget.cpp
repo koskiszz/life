@@ -1,5 +1,6 @@
 #include "fieldwidget.h"
 #include <qmath.h>
+#include <QMessageBox>
 
 
 FieldWidget::FieldWidget(QWidget *parent) :
@@ -84,5 +85,21 @@ void FieldWidget::paintCells(QPainter &painter)
             }
         }
     }
+}
+
+void FieldWidget::start()
+{
+    QMessageBox::information(this, "Start", "start", QMessageBox::Ok);
+}
+
+void FieldWidget::stop()
+{
+    QMessageBox::information(this, "Stop", "stop", QMessageBox::Ok);
+}
+
+void FieldWidget::clear()
+{
+    memset(&cells, false, sizeof(cells));
+    update();
 }
 

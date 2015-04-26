@@ -16,6 +16,9 @@ public:
 signals:
 
 public slots:
+    void start();
+    void stop();
+    void clear();
 
 private slots:
     void paintGrid(QPainter &painter);

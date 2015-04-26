@@ -8,6 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->fieldLayout->addWidget(field);
+
+    connect(ui->buttonStart, SIGNAL(clicked()), field, SLOT(start()));
+    connect(ui->buttonStop,  SIGNAL(clicked()), field, SLOT(stop()));
+    connect(ui->buttonClear, SIGNAL(clicked()), field, SLOT(clear()));
 }
 
 MainWindow::~MainWindow()
