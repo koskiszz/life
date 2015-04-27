@@ -36,6 +36,7 @@ private:
     bool isAlive(int i, int j);
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 };
 

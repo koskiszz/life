@@ -54,6 +54,19 @@ void FieldWidget::mousePressEvent(QMouseEvent *event)
     update();
 }
 
+// c этой штукой можно заполнять несколько ячеек сразу
+void FieldWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    double cellWidth = (double) width() / fieldSize;
+    double cellHeight = (double) height() / fieldSize;
+    int i = floor(event->y() / cellHeight) + 1;
+    int j = floor(event->x() / cellWidth) + 1;
+    if (! cells[i][j]) {
+        cells [i][j]= ! cells[i][j];
+    update();
+    }
+}
+
 // отвечает за отрисовку
 void FieldWidget::paintEvent(QPaintEvent *)
 {
